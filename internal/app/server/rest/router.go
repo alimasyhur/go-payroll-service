@@ -4,6 +4,7 @@ import (
 	"github.com/labstack/echo/v4"
 
 	"github.com/alimasyhur/go-payroll-service/internal/app/container"
+	"github.com/alimasyhur/go-payroll-service/internal/app/handler/rest/attendance"
 	"github.com/alimasyhur/go-payroll-service/internal/app/handler/rest/auth"
 	"github.com/alimasyhur/go-payroll-service/internal/app/handler/rest/health_check"
 )
@@ -14,7 +15,19 @@ func SetupRouter(server *echo.Echo, container *container.Container) {
 	authHandler := auth.NewHandler().
 		SetAuthUsecase(container.UserUsecase).
 		Validate()
+	attendanceHandler := attendance.NewHandler().
+		SetAttendanceUsecase(container.AttendanceUsecase).
+		Validate()
 
 	server.GET("/health-check", healthCheckHandler.Check)
 	server.POST("/login", authHandler.Login)
+
+	private := server.Group("/admin")
+	{
+		private.Use(JWTAuthMiddleware())
+
+		admin := private.Group("")
+		admin.Use(AdminOnlyMiddleware())
+		admin.POST("/attendance-periods", attendanceHandler.CreateAttendancePeriod)
+	}
 }

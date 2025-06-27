@@ -3,8 +3,13 @@ package rest
 import (
 	"bytes"
 	"io"
+	"net/http"
+	"os"
+	"strings"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/golang-jwt/jwt"
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
@@ -87,6 +92,49 @@ func LoggerMiddleware(container *container.Container) echo.MiddlewareFunc {
 			logger.Log.Info(ctx, "Response Not Log Because Unsupported Content-Type")
 		}
 	})
+}
+
+func AdminOnlyMiddleware() echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			role := c.Get("role")
+			if role == nil || role.(string) != "admin" {
+				return c.JSON(http.StatusForbidden, echo.Map{
+					"error": "admin access only",
+				})
+			}
+			return next(c)
+		}
+	}
+}
+
+func JWTAuthMiddleware() echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			authHeader := c.Request().Header.Get("Authorization")
+			if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
+				return echo.NewHTTPError(http.StatusUnauthorized, "missing or invalid token")
+			}
+
+			tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
+			token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
+				return []byte(os.Getenv("JWT_SECRET")), nil
+			})
+
+			if err != nil || !token.Valid {
+				return echo.NewHTTPError(http.StatusUnauthorized, "invalid token")
+			}
+
+			claims := token.Claims.(jwt.MapClaims)
+			userID := claims["user_uuid"].(string)
+			role := claims["role"].(string)
+
+			c.Set("user_uuid", uuid.MustParse(userID))
+			c.Set("role", role)
+
+			return next(c)
+		}
+	}
 }
 
 type DataValidator struct {
