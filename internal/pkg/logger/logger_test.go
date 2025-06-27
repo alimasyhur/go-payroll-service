@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
+	"github.com/alimasyhur/go-payroll-service/internal/pkg/logger"
 	"github.com/stretchr/testify/assert"
-	"github.com/weanan/weanan-service/internal/pkg/logger"
 )
 
 func TestInjectCtx(t *testing.T) {

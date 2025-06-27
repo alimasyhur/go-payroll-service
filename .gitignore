@@ -3,3 +3,4 @@ config.json
 cover.txt
 cover.html
 coverage.cov
+/bin/go-payroll-service

@@ -6,7 +6,7 @@ import (
 	postgres "go.elastic.co/apm/module/apmgormv2/v2/driver/postgres"
 	"gorm.io/gorm"
 
-	"github.com/weanan/weanan-service/config"
+	"github.com/alimasyhur/go-payroll-service/config"
 )
 
 func NewPostgreSQLDatabase(cfg config.DBConfig) (db *gorm.DB, err error) {

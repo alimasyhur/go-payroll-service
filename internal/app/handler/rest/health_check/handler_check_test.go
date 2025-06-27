@@ -7,9 +7,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/weanan/weanan-service/internal/app/handler/rest/health_check"
-	mockPkg "github.com/weanan/weanan-service/internal/pkg/mocks"
-	"github.com/weanan/weanan-service/internal/pkg/response"
+	"github.com/alimasyhur/go-payroll-service/internal/app/handler/rest/health_check"
+	mockPkg "github.com/alimasyhur/go-payroll-service/internal/pkg/mocks"
+	"github.com/alimasyhur/go-payroll-service/internal/pkg/response"
 )
 
 func TestCheck(t *testing.T) {

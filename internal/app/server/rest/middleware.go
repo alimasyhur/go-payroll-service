@@ -8,9 +8,9 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
-	"github.com/weanan/weanan-service/internal/app/container"
-	"github.com/weanan/weanan-service/internal/pkg/logger"
-	pkgValidator "github.com/weanan/weanan-service/internal/pkg/validator"
+	"github.com/alimasyhur/go-payroll-service/internal/app/container"
+	"github.com/alimasyhur/go-payroll-service/internal/pkg/logger"
+	pkgValidator "github.com/alimasyhur/go-payroll-service/internal/pkg/validator"
 )
 
 func SetupMiddleware(server *echo.Echo, container *container.Container) {

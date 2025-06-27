@@ -1,17 +1,16 @@
 package container
 
 import (
-	"github.com/weanan/weanan-service/config"
-	"github.com/weanan/weanan-service/internal/app/driver"
-	"github.com/weanan/weanan-service/internal/app/repository"
-	"github.com/weanan/weanan-service/internal/app/usecase/organization"
-	"github.com/weanan/weanan-service/internal/app/wrapper/beeceptor"
-	"github.com/weanan/weanan-service/internal/pkg/logger"
+	"github.com/alimasyhur/go-payroll-service/config"
+	"github.com/alimasyhur/go-payroll-service/internal/app/driver"
+	"github.com/alimasyhur/go-payroll-service/internal/app/repository"
+	"github.com/alimasyhur/go-payroll-service/internal/app/usecase/user"
+	"github.com/alimasyhur/go-payroll-service/internal/pkg/logger"
 )
 
 type Container struct {
-	Config              config.Config
-	OrganizationUsecase organization.OrganizationUsecase
+	Config      config.Config
+	UserUsecase user.UserUsecase
 }
 
 func Setup() *Container {
@@ -21,22 +20,18 @@ func Setup() *Container {
 	logger.NewLogger(logger.Option{IsEnable: cfg.Logger.IsEnable})
 
 	// Setup Driver
-	db, _ := driver.NewMySQLDatabase(cfg.DB)
+	db, _ := driver.NewPostgreSQLDatabase(cfg.DB)
 
 	// Setup Repository
-	organizationRepository := repository.NewOrganizationRepository(db)
-
-	// Setup Wrapper
-	beeceptorWrapper := beeceptor.NewWrapper().SetConfig(cfg.Beeceptor).Setup().Validate()
+	userRepository := repository.NewUserRepository(db)
 
 	// Setup Usecase
-	organizationUsecase := organization.NewUsecase().
-		SetOrganizationRepository(organizationRepository).
-		SetBeeceptorWrapper(beeceptorWrapper).
+	userUsecase := user.NewUsecase().
+		SetUserRepository(userRepository).
 		Validate()
 
 	return &Container{
-		Config:              cfg,
-		OrganizationUsecase: organizationUsecase,
+		Config:      cfg,
+		UserUsecase: userUsecase,
 	}
 }

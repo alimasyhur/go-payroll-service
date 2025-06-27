@@ -1,6 +1,6 @@
 package main
 
-import "github.com/weanan/weanan-service/cmd"
+import "github.com/alimasyhur/go-payroll-service/cmd"
 
 func main() {
 	cmd.Execute()

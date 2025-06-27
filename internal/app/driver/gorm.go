@@ -1,7 +1,7 @@
 package driver
 
 import (
-	"github.com/weanan/weanan-service/config"
+	"github.com/alimasyhur/go-payroll-service/config"
 	mysql "go.elastic.co/apm/module/apmgormv2/v2/driver/mysql"
 	postgres "go.elastic.co/apm/module/apmgormv2/v2/driver/postgres"
 	"gorm.io/gorm"

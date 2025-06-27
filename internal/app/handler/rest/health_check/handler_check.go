@@ -3,8 +3,8 @@ package health_check
 import (
 	"net/http"
 
+	"github.com/alimasyhur/go-payroll-service/internal/pkg/response"
 	"github.com/labstack/echo/v4"
-	"github.com/weanan/weanan-service/internal/pkg/response"
 )
 
 func (h *handler) Check(c echo.Context) error {

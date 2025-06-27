@@ -7,8 +7,8 @@ import (
 
 	"github.com/labstack/echo/v4"
 
-	"github.com/weanan/weanan-service/internal/app/server/rest"
-	"github.com/weanan/weanan-service/internal/pkg/validator"
+	"github.com/alimasyhur/go-payroll-service/internal/app/server/rest"
+	"github.com/alimasyhur/go-payroll-service/internal/pkg/validator"
 )
 
 func MockEcho(method, path string, headers http.Header, body []byte) (c echo.Context, rec *httptest.ResponseRecorder) {

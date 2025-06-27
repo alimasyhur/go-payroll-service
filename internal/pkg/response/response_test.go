@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/alimasyhur/go-payroll-service/internal/pkg/mocks"
+	"github.com/alimasyhur/go-payroll-service/internal/pkg/response"
 	"github.com/stretchr/testify/assert"
-	"github.com/weanan/weanan-service/internal/pkg/mocks"
-	"github.com/weanan/weanan-service/internal/pkg/response"
 )
 
 func TestResponseSuccess(t *testing.T) {

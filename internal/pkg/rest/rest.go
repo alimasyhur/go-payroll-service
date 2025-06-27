@@ -8,8 +8,8 @@ import (
 
 	"go.elastic.co/apm/v2"
 
+	"github.com/alimasyhur/go-payroll-service/internal/pkg/logger"
 	"github.com/go-resty/resty/v2"
-	"github.com/weanan/weanan-service/internal/pkg/logger"
 )
 
 type RestClient interface {

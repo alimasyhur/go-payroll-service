@@ -6,7 +6,7 @@ import (
 	mysql "go.elastic.co/apm/module/apmgormv2/v2/driver/mysql"
 	"gorm.io/gorm"
 
-	"github.com/weanan/weanan-service/config"
+	"github.com/alimasyhur/go-payroll-service/config"
 )
 
 func NewMySQLDatabase(cfg config.DBConfig) (db *gorm.DB, err error) {

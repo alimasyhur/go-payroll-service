@@ -2,24 +2,21 @@ package config
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/spf13/viper"
 )
 
 type Config struct {
-	App       AppConfig       `mapstructure:"app"`
-	Logger    LoggerConfig    `mapstructure:"logger"`
-	DB        DBConfig        `mapstructure:"db"`
-	Beeceptor BeeceptorConfig `mapstructure:"beeceptor"`
-	GCPPubsub GCPPubsubConfig `mapstructure:"gcpPubsub"`
+	App    AppConfig    `mapstructure:"app"`
+	Logger LoggerConfig `mapstructure:"logger"`
+	DB     DBConfig     `mapstructure:"db"`
 }
 
 type AppConfig struct {
-	Name     string `mapstructure:"name"`
-	Version  string `mapstructure:"version"`
-	HttpPort int    `mapstructure:"httpPort"`
-	GrpcPort int    `mapstructure:"grpcPort"`
+	Name      string `mapstructure:"name"`
+	Version   string `mapstructure:"version"`
+	HttpPort  int    `mapstructure:"httpPort"`
+	JwtSecret string `mapstructure:"jwtSecret"`
 }
 
 type LoggerConfig struct {
@@ -40,18 +37,6 @@ type DBConfig struct {
 	WriteTimeout       string `mapstructure:"writeTimeout"`
 	ReadTimeout        string `mapstructure:"readTimeout"`
 	SSLMode            string `mapstructure:"sslmode"`
-}
-
-type BeeceptorConfig struct {
-	Host    string        `mapstructure:"host"`
-	Timeout time.Duration `mapstructure:"timeout"`
-	SkipTLS bool          `mapstructure:"skiptls"`
-}
-
-type GCPPubsubConfig struct {
-	ProjectID               string `mapstructure:"projectId"`
-	SubscriberSendMessageID string `mapstructure:"subscriberSendMessageId"`
-	ServiceAccount          string `mapstructure:"serviceAccount"`
 }
 
 func Load() Config {

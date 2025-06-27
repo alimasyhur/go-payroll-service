@@ -1,10 +1,10 @@
 .PHONY: build build-alpine clean test help default
 
 
-BIN_NAME=weanan-service
+BIN_NAME=go-payroll-service
 
 VERSION    := $(shell grep "const Version " version/version.go | sed -E 's/.*"(.+)"$$/\1/')
-IMAGE_NAME := "weanan-service"
+IMAGE_NAME := "go-payroll-service"
 GOTEST     := go test -v
 
 GIT_COMMIT =$(shell git rev-parse HEAD)
@@ -30,7 +30,7 @@ help:
 build:
 	@echo "building ${BIN_NAME} ${VERSION}"
 	@echo "GOPATH=${GOPATH}"
-	go build -ldflags "-X github.com/weanan/weanan-service/version.GitCommit=${GIT_COMMIT}${GIT_DIRTY} -X github.com/weanan/weanan-service/version.BuildDate=${BUILD_DATE}" -o bin/${BIN_NAME}
+	go build -ldflags "-X github.com/alimasyhur/go-payroll-service/version.GitCommit=${GIT_COMMIT}${GIT_DIRTY} -X github.com/alimasyhur/go-payroll-service/version.BuildDate=${BUILD_DATE}" -o bin/${BIN_NAME}
 
 get-deps:
 	dep ensure
@@ -38,7 +38,7 @@ get-deps:
 build-alpine:
 	@echo "building ${BIN_NAME} ${VERSION}"
 	@echo "GOPATH=${GOPATH}"
-	go build -ldflags '-w -linkmode external -extldflags "-static" -X github.com/weanan/weanan-service/version.GitCommit=${GIT_COMMIT}${GIT_DIRTY} -X github.com/weanan/weanan-service/version.BuildDate=${BUILD_DATE}' -o bin/${BIN_NAME}
+	go build -ldflags '-w -linkmode external -extldflags "-static" -X github.com/alimasyhur/go-payroll-service/version.GitCommit=${GIT_COMMIT}${GIT_DIRTY} -X github.com/alimasyhur/go-payroll-service/version.BuildDate=${BUILD_DATE}' -o bin/${BIN_NAME}
 
 package:
 	@echo "building image ${BIN_NAME} ${VERSION} $(GIT_COMMIT)"
@@ -95,9 +95,6 @@ mock-pkg:
 	mockery --dir=internal/pkg/logger --output=internal/pkg/logger/mocks/ --all
 	mockery --dir=internal/pkg/rest --output=internal/pkg/rest/mocks/ --all
 	mockery --dir=internal/pkg/redis --output=internal/pkg/redis/mocks/ --all
-
-mock-wrapper:
-	mockery --dir=internal/app/wrapper/beeceptor --output=internal/app/wrapper/beeceptor/mocks/ --all
 
 mock-repository:
 	mockery --dir=internal/app/repository --output=internal/app/repository/mocks/ --all

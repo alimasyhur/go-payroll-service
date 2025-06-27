@@ -1,0 +1,37 @@
+package migration
+
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
+
+func init() {
+	migrator.AddMigration(&Migration{
+		ID:        0,
+		Name:      "20250627165556_create_user_salaries_table",
+		Batch:     0,
+		CreatedAt: time.Time{},
+		Up:        mig_20250627165556_create_user_salaries_table_up,
+		Down:      mig_20250627165556_create_user_salaries_table_down,
+	})
+}
+
+func mig_20250627165556_create_user_salaries_table_up(tx *gorm.DB) error {
+	err := tx.Exec(`CREATE TABLE user_salaries (
+		uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+		user_uuid UUID NOT NULL REFERENCES users(uuid) ON DELETE CASCADE,
+		amount FLOAT NOT NULL CHECK (amount > 0),
+		active BOOLEAN DEFAULT TRUE,
+		effective_date DATE NOT NULL,
+		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+		updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+	);`).Error
+
+	return err
+}
+
+func mig_20250627165556_create_user_salaries_table_down(tx *gorm.DB) error {
+	err := tx.Exec(`DROP TABLE IF EXISTS user_salaries`).Error
+	return err
+}

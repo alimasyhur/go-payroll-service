@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/alimasyhur/go-payroll-service/internal/pkg/apperror"
 	"github.com/stretchr/testify/assert"
-	"github.com/weanan/weanan-service/internal/pkg/apperror"
 )
 
 func TestApplicationError(t *testing.T) {

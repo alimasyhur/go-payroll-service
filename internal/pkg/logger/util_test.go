@@ -3,8 +3,8 @@ package logger_test
 import (
 	"testing"
 
+	"github.com/alimasyhur/go-payroll-service/internal/pkg/logger"
 	"github.com/stretchr/testify/assert"
-	"github.com/weanan/weanan-service/internal/pkg/logger"
 )
 
 func TestIsSkipLog(t *testing.T) {

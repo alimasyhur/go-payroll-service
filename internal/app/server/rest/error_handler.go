@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"runtime"
 
+	"github.com/alimasyhur/go-payroll-service/internal/pkg/apperror"
+	"github.com/alimasyhur/go-payroll-service/internal/pkg/response"
 	"github.com/labstack/echo/v4"
-	"github.com/weanan/weanan-service/internal/pkg/apperror"
-	"github.com/weanan/weanan-service/internal/pkg/response"
 )
 
 func errorHandler(err error, c echo.Context) {

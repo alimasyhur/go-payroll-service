@@ -1,37 +1,26 @@
 {
   "app": {
-    "name": "eFeeder Go Boilerplate",
+    "name": "Payroll Service",
     "version": "v1.0.0",
     "httpPort": "9000",
-    "grpcPort": "9001"
+    "jwtSecret": "supersecret"
   },
   "logger": {
     "isEnable": true
   },
   "db": {
-    "driver": "mysql",
-    "username": "root",
-    "password": "root-123",
-    "name": "weanan",
-    "host": "127.0.0.1",
-    "port": 3306,
-    "maxIdleConnections": 10,
-    "maxOpenConnections": 30,
     "debugMode": true,
-    "timeout": "60s",
-    "writeTimeout": "60s",
-    "readTimeout": "60s",
-    "sslmode": "disable"
-  },
-  "beeceptor": {
-    "host": "https://feeder.free.beeceptor.com",
-    "timeout": "30s",
-    "skiptls": true
-  },
-  "gcpPubsub": {
-    "projectId": "tourdelest-1275",
-    "topicSendMessageId": "projects/tourdelest-1275/topics/weanan",
-    "subscriberSendMessageId": "projects/tourdelest-1275/subscriptions/weanan-sub",
-    "serviceAccount": {}
+    "driver": "postgres",
+    "host": "localhost",
+    "maxIdleConnections": 120,
+    "maxOpenConnections": 100,
+    "name": "dealls-payroll",
+    "password": "password",
+    "port": 5432,
+    "readTimeout": "240s",
+    "sslmode": "disable",
+    "timeout": "240s",
+    "username": "postgres",
+    "writeTimeout": "240s"
   }
 }

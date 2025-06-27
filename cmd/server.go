@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/weanan/weanan-service/cmd/server"
+	"github.com/alimasyhur/go-payroll-service/cmd/server"
 )
 
 func newServerCmd() *cobra.Command {
@@ -23,7 +23,6 @@ func newServerCmd() *cobra.Command {
 	}
 
 	serverCmd.AddCommand(server.NewRestServer())
-	serverCmd.AddCommand(server.NewSubscriberServer())
 
 	return serverCmd
 }

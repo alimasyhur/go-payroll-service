@@ -4,9 +4,9 @@ import (
 	"log"
 	"strings"
 
-	"github.com/weanan/weanan-service/config"
-	"github.com/weanan/weanan-service/internal/app/driver"
-	"github.com/weanan/weanan-service/migration"
+	"github.com/alimasyhur/go-payroll-service/config"
+	"github.com/alimasyhur/go-payroll-service/internal/app/driver"
+	"github.com/alimasyhur/go-payroll-service/migration"
 	"gorm.io/gorm"
 
 	_ "github.com/lib/pq"
