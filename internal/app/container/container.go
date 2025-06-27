@@ -27,6 +27,7 @@ func Setup() *Container {
 	// Setup Repository
 	userRepository := repository.NewUserRepository(db)
 	attendancePeriodRepository := repository.NewAttendancePeriodRepository(db)
+	attendanceRepository := repository.NewAttendanceRepository(db)
 
 	// Setup Usecase
 	userUsecase := user.NewUsecase().
@@ -35,6 +36,7 @@ func Setup() *Container {
 
 	attendancePeriodUsecase := attendance.NewUsecase().
 		SetAttendancePeriodRepository(attendancePeriodRepository).
+		SetAttendanceRepository(attendanceRepository).
 		Validate()
 
 	return &Container{

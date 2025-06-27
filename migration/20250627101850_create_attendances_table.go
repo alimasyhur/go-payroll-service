@@ -22,6 +22,8 @@ func mig_20250627101850_create_attendances_table_up(tx *gorm.DB) error {
 		uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
 		user_uuid UUID NOT NULL REFERENCES users(uuid) ON DELETE CASCADE,
 		date DATE NOT NULL,
+		clockin TIME,
+		clockout TIME,
 		ip VARCHAR(64),
 		created_by UUID NOT NULL REFERENCES users(uuid),
 		updated_by UUID NOT NULL REFERENCES users(uuid),

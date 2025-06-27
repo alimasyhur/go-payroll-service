@@ -7,6 +7,7 @@ import (
 
 type AttendanceHandler interface {
 	CreateAttendancePeriod(c echo.Context) error
+	CreateAttendance(c echo.Context) error
 }
 
 type handler struct {

@@ -11,6 +11,7 @@ import (
 
 type AttendancePeriod interface {
 	GetOneByDaterange(ctx context.Context, startDate, endDate string) (result entity.AttendancePeriod, err error)
+	GetOneClosedByDate(ctx context.Context, date string) (result entity.AttendancePeriod, err error)
 	CreateAttendancePeriod(ctx context.Context, payload entity.AttendancePeriod) (result entity.AttendancePeriod, err error)
 }
 
@@ -43,10 +44,31 @@ func (r *attendancePeriod) GetOneByDaterange(ctx context.Context, startDate, end
 		Take(&result).Error
 
 	if err != nil {
-		fmt.Println("wkwkwk error: ", err.Error())
 		logger.Log.Error(ctx, err.Error(), "AttendancePeriodRepository.GetOneByDaterange", map[string]interface{}{
 			"start_date": startDate,
 			"end_date":   endDate,
+		})
+		return
+	}
+
+	return
+}
+
+func (r *attendancePeriod) GetOneClosedByDate(ctx context.Context, date string) (result entity.AttendancePeriod, err error) {
+	err = r.db.WithContext(ctx).Table(r.tableName).Select(
+		"uuid",
+		"start_date",
+		"end_date",
+		"is_closed",
+		"created_at",
+		"updated_at",
+	).
+		Where("? BETWEEN start_date AND end_date AND is_closed = true", date).
+		Take(&result).Error
+
+	if err != nil {
+		logger.Log.Error(ctx, err.Error(), "AttendancePeriodRepository.GetOneClosedByDaterange", map[string]interface{}{
+			"date": date,
 		})
 		return
 	}

@@ -9,7 +9,6 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/golang-jwt/jwt"
-	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
@@ -126,10 +125,10 @@ func JWTAuthMiddleware() echo.MiddlewareFunc {
 			}
 
 			claims := token.Claims.(jwt.MapClaims)
-			userID := claims["user_uuid"].(string)
+			userUUID := claims["user_uuid"].(string)
 			role := claims["role"].(string)
 
-			c.Set("user_uuid", uuid.MustParse(userID))
+			c.Set("user_uuid", userUUID)
 			c.Set("role", role)
 
 			return next(c)

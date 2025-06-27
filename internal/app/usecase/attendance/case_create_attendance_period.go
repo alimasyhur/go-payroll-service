@@ -8,6 +8,7 @@ import (
 
 	"github.com/alimasyhur/go-payroll-service/internal/app/entity"
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 func (uc *usecase) CreateAttendancePeriod(ctx context.Context, req AttendancePeriodRequest) (resp AttendancePeriodResponse, err error) {
@@ -23,7 +24,7 @@ func (uc *usecase) CreateAttendancePeriod(ctx context.Context, req AttendancePer
 	}
 
 	existPeriod, err := uc.attendancePeriodRepository.GetOneByDaterange(ctx, req.StartDate, req.EndDate)
-	if err != nil {
+	if err != nil && err != gorm.ErrRecordNotFound {
 		return resp, fmt.Errorf("invalid start_date and end_date. %s", err.Error())
 	}
 

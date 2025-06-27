@@ -15,3 +15,21 @@ type AttendancePeriodResponse struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
+
+type AttendanceRequest struct {
+	UserUUID string `json:"user_uuid" validate:"required"`
+	IP       string `json:"ip" validate:"required"`
+}
+
+type AttendanceResponse struct {
+	UUID      string    `json:"uuid"`
+	UserUUID  string    `json:"user_uuid"`
+	Date      string    `json:"date"`
+	ClockIn   string    `json:"clockin"`
+	ClockOut  string    `json:"clockout"`
+	IP        string    `json:"ip"`
+	CreatedBy string    `json:"created_by"`
+	UpdatedBy string    `json:"updated_by"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}

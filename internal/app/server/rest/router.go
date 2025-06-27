@@ -22,12 +22,16 @@ func SetupRouter(server *echo.Echo, container *container.Container) {
 	server.GET("/health-check", healthCheckHandler.Check)
 	server.POST("/login", authHandler.Login)
 
-	private := server.Group("/admin")
+	private := server.Group("")
 	{
 		private.Use(JWTAuthMiddleware())
+		private.POST("/attendances", attendanceHandler.CreateAttendance)
 
-		admin := private.Group("")
-		admin.Use(AdminOnlyMiddleware())
-		admin.POST("/attendance-periods", attendanceHandler.CreateAttendancePeriod)
+		admin := private.Group("/admin")
+		{
+			admin.Use(AdminOnlyMiddleware())
+			admin.POST("/attendance-periods", attendanceHandler.CreateAttendancePeriod)
+		}
 	}
+
 }
