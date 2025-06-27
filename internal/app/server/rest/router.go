@@ -7,6 +7,7 @@ import (
 	"github.com/alimasyhur/go-payroll-service/internal/app/handler/rest/attendance"
 	"github.com/alimasyhur/go-payroll-service/internal/app/handler/rest/auth"
 	"github.com/alimasyhur/go-payroll-service/internal/app/handler/rest/health_check"
+	"github.com/alimasyhur/go-payroll-service/internal/app/handler/rest/overtime"
 )
 
 func SetupRouter(server *echo.Echo, container *container.Container) {
@@ -18,6 +19,9 @@ func SetupRouter(server *echo.Echo, container *container.Container) {
 	attendanceHandler := attendance.NewHandler().
 		SetAttendanceUsecase(container.AttendanceUsecase).
 		Validate()
+	overtimeHandler := overtime.NewHandler().
+		SetOvertimeUsecase(container.OvertimeUsecase).
+		Validate()
 
 	server.GET("/health-check", healthCheckHandler.Check)
 	server.POST("/login", authHandler.Login)
@@ -26,6 +30,7 @@ func SetupRouter(server *echo.Echo, container *container.Container) {
 	{
 		private.Use(JWTAuthMiddleware())
 		private.POST("/attendances", attendanceHandler.CreateAttendance)
+		private.POST("/overtimes", overtimeHandler.CreateOvertime)
 
 		admin := private.Group("/admin")
 		{
