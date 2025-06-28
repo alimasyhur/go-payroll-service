@@ -6,15 +6,17 @@ import (
 	"github.com/alimasyhur/go-payroll-service/internal/app/repository"
 	"github.com/alimasyhur/go-payroll-service/internal/app/usecase/attendance"
 	"github.com/alimasyhur/go-payroll-service/internal/app/usecase/overtime"
+	"github.com/alimasyhur/go-payroll-service/internal/app/usecase/reimbursement"
 	"github.com/alimasyhur/go-payroll-service/internal/app/usecase/user"
 	"github.com/alimasyhur/go-payroll-service/internal/pkg/logger"
 )
 
 type Container struct {
-	Config            config.Config
-	UserUsecase       user.UserUsecase
-	AttendanceUsecase attendance.AttendanceUsecase
-	OvertimeUsecase   overtime.OvertimeUsecase
+	Config               config.Config
+	UserUsecase          user.UserUsecase
+	AttendanceUsecase    attendance.AttendanceUsecase
+	OvertimeUsecase      overtime.OvertimeUsecase
+	ReimbursementUsecase reimbursement.ReimbursementUsecase
 }
 
 func Setup() *Container {
@@ -31,6 +33,7 @@ func Setup() *Container {
 	attendancePeriodRepository := repository.NewAttendancePeriodRepository(db)
 	attendanceRepository := repository.NewAttendanceRepository(db)
 	overtimeRepository := repository.NewOvertimeRepository(db)
+	reimbursementRepository := repository.NewReimbursementRepository(db)
 
 	// Setup Usecase
 	userUsecase := user.NewUsecase().
@@ -47,10 +50,16 @@ func Setup() *Container {
 		SetOvertimeRepository(overtimeRepository).
 		Validate()
 
+	reimbursementUsecase := reimbursement.NewUsecase().
+		SetAttendancePeriodRepository(attendancePeriodRepository).
+		SetReimbursementRepository(reimbursementRepository).
+		Validate()
+
 	return &Container{
-		Config:            cfg,
-		UserUsecase:       userUsecase,
-		AttendanceUsecase: attendancePeriodUsecase,
-		OvertimeUsecase:   overtimeUsecase,
+		Config:               cfg,
+		UserUsecase:          userUsecase,
+		AttendanceUsecase:    attendancePeriodUsecase,
+		OvertimeUsecase:      overtimeUsecase,
+		ReimbursementUsecase: reimbursementUsecase,
 	}
 }

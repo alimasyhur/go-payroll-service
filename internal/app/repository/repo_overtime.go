@@ -12,7 +12,6 @@ import (
 type Overtime interface {
 	CreateOvertime(ctx context.Context, payload entity.Overtime) (result entity.Overtime, err error)
 	GetOneByUserDate(ctx context.Context, userUUID, date string) (result entity.Overtime, err error)
-	UpdateOvertime(ctx context.Context, data entity.Overtime) error
 }
 
 type overtime struct {
@@ -66,17 +65,4 @@ func (r *overtime) CreateOvertime(ctx context.Context, payload entity.Overtime) 
 	}
 
 	return payload, nil
-}
-
-func (r *overtime) UpdateOvertime(ctx context.Context, data entity.Overtime) error {
-	err := r.db.WithContext(ctx).Table(r.tableName).Save(&data).Error
-
-	if err != nil {
-		logger.Log.Error(ctx, "OvertimeRepository.UpdateUpdateOvertimeAttendance", map[string]interface{}{
-			"data": data,
-		})
-		return err
-	}
-
-	return nil
 }
