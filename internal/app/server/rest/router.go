@@ -42,7 +42,7 @@ func SetupRouter(server *echo.Echo, container *container.Container) {
 
 	private := server.Group("")
 	{
-		private.Use(JWTAuthMiddleware())
+		private.Use(JWTAuthMiddleware(container))
 		private.POST("/attendances", attendanceHandler.CreateAttendance)
 		private.POST("/overtimes", overtimeHandler.CreateOvertime)
 		private.POST("/reimbursements", reimbursementHandler.CreateReimbursement)

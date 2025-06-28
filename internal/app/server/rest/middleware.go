@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"io"
 	"net/http"
-	"os"
 	"strings"
 
 	"github.com/go-playground/validator/v10"
@@ -108,7 +107,7 @@ func AdminOnlyMiddleware() echo.MiddlewareFunc {
 	}
 }
 
-func JWTAuthMiddleware() echo.MiddlewareFunc {
+func JWTAuthMiddleware(container *container.Container) echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			authHeader := c.Request().Header.Get("Authorization")
@@ -118,7 +117,7 @@ func JWTAuthMiddleware() echo.MiddlewareFunc {
 
 			tokenStr := strings.TrimPrefix(authHeader, "Bearer ")
 			token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
-				return []byte(os.Getenv("JWT_SECRET")), nil
+				return []byte(container.Config.App.JwtSecret), nil
 			})
 
 			if err != nil || !token.Valid {

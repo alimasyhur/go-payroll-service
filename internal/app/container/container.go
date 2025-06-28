@@ -45,6 +45,7 @@ func Setup() *Container {
 
 	// Setup Usecase
 	userUsecase := user.NewUsecase().
+		SetConfig(cfg.App).
 		SetUserRepository(userRepository).
 		Validate()
 

@@ -28,7 +28,7 @@ A backend system to manage employee payroll (payslip), attendance, overtime, and
 - Auth: JWT
 - Migrations: Raw SQL or `./bin/go-payroll-service migrate up`
 - Logging: Echo middleware + request ID
-- Testing: `go test`, `httptest`
+- Testing: `bash test_usecase.sh`
 
 ---
 
@@ -89,13 +89,82 @@ run ./bin/go-payroll-service seeder user-seed
 run ./bin/go-payroll-service
 ```
 
-🔐 Authentication
-Login:
-POST /login
-Body: {"username": "admin", "password": "payroll123"}
-
-Authorization:
-Add header to all requests:
+6. Test Usecase
 ```bash
-Authorization: Bearer <your_token>
+run bash test_usecase.sh
+```
+
+## 📘 API Reference
+
+### 🔐 Authentication
+
+| Method | Endpoint       | Description             | Auth Required | Role    |
+|--------|----------------|-------------------------|----------------|---------|
+| POST   | `/login`       | User login, returns JWT | ❌             | Public  |
+
+---
+
+### 🗓️ Attendance
+
+| Method | Endpoint             | Description                          | Auth | Role     |
+|--------|----------------------|--------------------------------------|------|----------|
+| POST   | `/attendances`       | Submit check-in / check-out          | ✅   | Employee |
+
+---
+
+### 📅 Attendance Period (Admin)
+
+| Method | Endpoint                             | Description                           | Auth | Role  |
+|--------|--------------------------------------|---------------------------------------|------|-------|
+| POST   | `/attendance-periods`                | Create a new attendance period        | ✅   | Admin |
+
+---
+
+### ⏱️ Overtime
+
+| Method | Endpoint           | Description                           | Auth | Role     |
+|--------|---------------------|---------------------------------------|------|----------|
+| POST   | `/overtimes`      | Submit overtime (max 3 hrs/day)       | ✅   | Employee |
+
+---
+
+### 💵 Reimbursement
+
+| Method | Endpoint                | Description                    | Auth | Role     |
+|--------|-------------------------|--------------------------------|------|----------|
+| POST   | `/reimbursements`       | Submit a reimbursement claim   | ✅   | Employee |
+
+---
+
+### 📄 Payslip
+
+| Method | Endpoint                     | Description                                   | Auth | Role     |
+|--------|------------------------------|-----------------------------------------------|------|----------|
+| GET    | `/payslips/:payroll_uuid`      | View payslip breakdown for selected payroll   | ✅   | Employee |
+
+---
+
+### 🧮 Payroll (Admin)
+
+| Method | Endpoint                          | Description                                    | Auth | Role  |
+|--------|-----------------------------------|------------------------------------------------|------|-------|
+| POST   | `/payrolls/run`                   | Generate payslips for active attendance period | ✅   | Admin |
+| GET    | `/payrolls/:payroll_uuid/summary` | Get total take-home pay for all employees      | ✅   | Admin |
+
+---
+
+### 🩺 Health Check
+
+| Method | Endpoint          | Description          | Auth | Role  |
+|--------|-------------------|----------------------|------|-------|
+| GET    | `/health-check`   | Check service status | ❌   | Public |
+
+---
+
+### 🔐 Required Headers (for protected routes)
+
+```http
+Authorization: Bearer <jwt_token>
+X-Request-ID: <uuid>
+Content-Type: application/json
 ```

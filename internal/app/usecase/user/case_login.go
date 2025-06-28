@@ -3,7 +3,6 @@ package user
 import (
 	"context"
 	"fmt"
-	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt"
@@ -17,8 +16,6 @@ func (uc *usecase) Login(ctx context.Context, req LoginRequest) (resp LoginRespo
 	}
 
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {
-		fmt.Println("db pwd", user.Password)
-		fmt.Println("req pwd", req.Password)
 		return resp, fmt.Errorf("invalid credentials. %s", err.Error())
 	}
 
@@ -29,7 +26,7 @@ func (uc *usecase) Login(ctx context.Context, req LoginRequest) (resp LoginRespo
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	jwtSecret := os.Getenv("JWT_SECRET")
+	jwtSecret := uc.config.JwtSecret
 	signedToken, err := token.SignedString([]byte(jwtSecret))
 	if err != nil {
 		return resp, fmt.Errorf("fail to generate token")
