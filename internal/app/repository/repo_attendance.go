@@ -13,6 +13,7 @@ type Attendance interface {
 	CreateAttendance(ctx context.Context, payload entity.Attendance) (result entity.Attendance, err error)
 	GetOneByUserDate(ctx context.Context, userUUID, date string) (result entity.Attendance, err error)
 	UpdateAttendance(ctx context.Context, data entity.Attendance) error
+	GetWorkdaysByUserDaterange(ctx context.Context, userUUID, startDate, endDate string) (total int64, err error)
 }
 
 type attendance struct {
@@ -80,4 +81,21 @@ func (r *attendance) UpdateAttendance(ctx context.Context, data entity.Attendanc
 	}
 
 	return nil
+}
+
+func (r *attendance) GetWorkdaysByUserDaterange(ctx context.Context, userUUID, startDate, endDate string) (total int64, err error) {
+	err = r.db.WithContext(ctx).Table(r.tableName).
+		Where("user_uuid = ? AND date BETWEEN ? AND ?", userUUID, startDate, endDate).
+		Count(&total).Error
+
+	if err != nil {
+		logger.Log.Error(ctx, err.Error(), "AttendanceRepository.GetCountByUserDaterange", map[string]interface{}{
+			"user_uuid":  userUUID,
+			"start_date": startDate,
+			"end_date":   endDate,
+		})
+		return
+	}
+
+	return
 }

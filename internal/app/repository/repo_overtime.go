@@ -12,6 +12,7 @@ import (
 type Overtime interface {
 	CreateOvertime(ctx context.Context, payload entity.Overtime) (result entity.Overtime, err error)
 	GetOneByUserDate(ctx context.Context, userUUID, date string) (result entity.Overtime, err error)
+	GetListByUserDaterange(ctx context.Context, userUUID, startDate, endDate string) (results []entity.Overtime, err error)
 }
 
 type overtime struct {
@@ -65,4 +66,21 @@ func (r *overtime) CreateOvertime(ctx context.Context, payload entity.Overtime) 
 	}
 
 	return payload, nil
+}
+
+func (r *overtime) GetListByUserDaterange(ctx context.Context, userUUID, startDate, endDate string) (results []entity.Overtime, err error) {
+	err = r.db.WithContext(ctx).Table(r.tableName).
+		Where("user_uuid = ? AND date BETWEEN ? AND ?", userUUID, startDate, endDate).
+		Find(&results).Error
+
+	if err != nil {
+		logger.Log.Error(ctx, err.Error(), "OvertimeRepository.GetListByUserDaterange", map[string]interface{}{
+			"user_uuid":  userUUID,
+			"start_date": startDate,
+			"end_date":   endDate,
+		})
+		return
+	}
+
+	return
 }

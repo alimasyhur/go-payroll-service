@@ -11,6 +11,7 @@ import (
 
 type Reimbursement interface {
 	CreateReimbursement(ctx context.Context, payload entity.Reimbursement) (result entity.Reimbursement, err error)
+	GetListByUserDaterange(ctx context.Context, userUUID, startDate, endDate string) (results []entity.Reimbursement, err error)
 }
 
 type reimbursement struct {
@@ -38,4 +39,21 @@ func (r *reimbursement) CreateReimbursement(ctx context.Context, payload entity.
 	}
 
 	return payload, nil
+}
+
+func (r *reimbursement) GetListByUserDaterange(ctx context.Context, userUUID, startDate, endDate string) (results []entity.Reimbursement, err error) {
+	err = r.db.WithContext(ctx).Table(r.tableName).
+		Where("user_uuid = ? AND date BETWEEN ? AND ?", userUUID, startDate, endDate).
+		Find(&results).Error
+
+	if err != nil {
+		logger.Log.Error(ctx, err.Error(), "OvertimeRepository.GetListByUserDaterange", map[string]interface{}{
+			"user_uuid":  userUUID,
+			"start_date": startDate,
+			"end_date":   endDate,
+		})
+		return
+	}
+
+	return
 }

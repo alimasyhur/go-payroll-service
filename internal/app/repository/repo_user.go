@@ -11,8 +11,9 @@ import (
 
 type User interface {
 	GetOneByUsername(ctx context.Context, username string) (result entity.User, err error)
+	GetListByRole(ctx context.Context, role string) (results []entity.User, err error)
 	CreateUser(ctx context.Context, payload entity.User) (result entity.User, err error)
-	CreateUserSalary(ctx context.Context, payload entity.UserSalary) (result entity.UserSalary, err error)
+	CreateEmployeeSalary(ctx context.Context, payload entity.EmployeeSalary) (result entity.EmployeeSalary, err error)
 }
 
 type user struct {
@@ -29,6 +30,25 @@ func NewUserRepository(db *gorm.DB) User {
 		tableName: "users",
 		db:        db,
 	}
+}
+
+func (r *user) GetListByRole(ctx context.Context, role string) (results []entity.User, err error) {
+	err = r.db.WithContext(ctx).Table(r.tableName).Select(
+		"uuid",
+		"username",
+		"role",
+	).
+		Where("role = ?", role).
+		Find(&results).Error
+
+	if err != nil {
+		logger.Log.Error(ctx, err.Error(), "UserRepository.GetListByRole", map[string]interface{}{
+			"role": role,
+		})
+		return
+	}
+
+	return
 }
 
 func (r *user) GetOneByUsername(ctx context.Context, username string) (result entity.User, err error) {
@@ -62,12 +82,12 @@ func (r *user) CreateUser(ctx context.Context, payload entity.User) (entity.User
 	return payload, nil
 }
 
-func (r *user) CreateUserSalary(ctx context.Context, payload entity.UserSalary) (entity.UserSalary, error) {
-	err := r.db.WithContext(ctx).Table("user_salaries").Create(&payload).Error
+func (r *user) CreateEmployeeSalary(ctx context.Context, payload entity.EmployeeSalary) (entity.EmployeeSalary, error) {
+	err := r.db.WithContext(ctx).Table("employee_salaries").Create(&payload).Error
 	if err != nil {
-		logger.Log.Error(ctx, fmt.Sprintf("UserRepository.CreateUserSalary error: %s", err.Error()), payload)
-		err = fmt.Errorf("UserRepository.CreateUserSalary error: %s", err.Error())
-		return entity.UserSalary{}, err
+		logger.Log.Error(ctx, fmt.Sprintf("UserRepository.CreateEmployeeSalary error: %s", err.Error()), payload)
+		err = fmt.Errorf("UserRepository.CreateEmployeeSalary error: %s", err.Error())
+		return entity.EmployeeSalary{}, err
 	}
 
 	return payload, nil

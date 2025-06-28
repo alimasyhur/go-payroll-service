@@ -35,7 +35,7 @@ func (uc *usecase) GenerateUserSeed(ctx context.Context) (err error) {
 			log.Println("Failed to seed user:", err)
 		}
 
-		salary := entity.UserSalary{
+		salary := entity.EmployeeSalary{
 			UUID:          uuid.New().String(),
 			UserUUID:      user.UUID,
 			Amount:        float64(rand.Intn(5_000_000) + 5_000_000),
@@ -43,7 +43,7 @@ func (uc *usecase) GenerateUserSeed(ctx context.Context) (err error) {
 			EffectiveDate: time.Now(),
 			CreatedAt:     time.Now(),
 		}
-		if _, err = uc.userRepository.CreateUserSalary(ctx, salary); err != nil {
+		if _, err = uc.userRepository.CreateEmployeeSalary(ctx, salary); err != nil {
 			log.Println("Failed to seed user salary:", err)
 		}
 	}

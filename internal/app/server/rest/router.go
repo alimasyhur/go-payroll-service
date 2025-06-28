@@ -8,6 +8,7 @@ import (
 	"github.com/alimasyhur/go-payroll-service/internal/app/handler/rest/auth"
 	"github.com/alimasyhur/go-payroll-service/internal/app/handler/rest/health_check"
 	"github.com/alimasyhur/go-payroll-service/internal/app/handler/rest/overtime"
+	"github.com/alimasyhur/go-payroll-service/internal/app/handler/rest/payroll"
 	"github.com/alimasyhur/go-payroll-service/internal/app/handler/rest/reimbursement"
 )
 
@@ -26,6 +27,9 @@ func SetupRouter(server *echo.Echo, container *container.Container) {
 	reimbursementHandler := reimbursement.NewHandler().
 		SetReimbursementUsecase(container.ReimbursementUsecase).
 		Validate()
+	payrollHandler := payroll.NewHandler().
+		SetPayrollUsecase(container.PayrollUsecase).
+		Validate()
 
 	server.GET("/health-check", healthCheckHandler.Check)
 	server.POST("/login", authHandler.Login)
@@ -37,10 +41,11 @@ func SetupRouter(server *echo.Echo, container *container.Container) {
 		private.POST("/overtimes", overtimeHandler.CreateOvertime)
 		private.POST("/reimbursements", reimbursementHandler.CreateReimbursement)
 
-		admin := private.Group("/admin")
+		admin := private.Group("")
 		{
 			admin.Use(AdminOnlyMiddleware())
 			admin.POST("/attendance-periods", attendanceHandler.CreateAttendancePeriod)
+			admin.POST("/payrolls/run", payrollHandler.CreatePayroll)
 		}
 	}
 

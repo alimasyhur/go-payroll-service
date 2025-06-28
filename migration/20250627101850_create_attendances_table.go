@@ -20,13 +20,13 @@ func init() {
 func mig_20250627101850_create_attendances_table_up(tx *gorm.DB) error {
 	err := tx.Exec(`CREATE TABLE attendances (
 		uuid UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-		user_uuid UUID NOT NULL REFERENCES users(uuid) ON DELETE CASCADE,
+		user_uuid UUID NOT NULL,
 		date DATE NOT NULL,
 		clockin TIME,
 		clockout TIME,
 		ip VARCHAR(64),
-		created_by UUID NOT NULL REFERENCES users(uuid),
-		updated_by UUID NOT NULL REFERENCES users(uuid),
+		created_by UUID NOT NULL,
+		updated_by UUID NOT NULL,
 		created_at TIMESTAMP NOT NULL DEFAULT NOW(),
 		updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
 		UNIQUE(user_uuid, date)

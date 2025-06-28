@@ -4,7 +4,7 @@ import (
 	"time"
 )
 
-type UserSalary struct {
+type EmployeeSalary struct {
 	UUID          string    `gorm:"column:uuid;type:uuid;default:uuid_generate_v4();primaryKey"`
 	UserUUID      string    `gorm:"column:user_uuid;type:uuid;not null;index"`
 	Amount        float64   `gorm:"column:amount;not null"`
