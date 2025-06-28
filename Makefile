@@ -100,6 +100,11 @@ mock-repository:
 	mockery --dir=internal/app/repository --output=internal/app/repository/mocks/ --all
 
 mock-usecase:
-	mockery --dir=internal/app/usecase/organization --output=internal/app/usecase/organization/mocks/ --all
+	mockery --dir=internal/app/usecase/attendance --output=internal/app/usecase/attendance/mocks/ --all
+	mockery --dir=internal/app/usecase/overtime --output=internal/app/usecase/overtime/mocks/ --all
+	mockery --dir=internal/app/usecase/payroll --output=internal/app/usecase/payroll/mocks/ --all
+	mockery --dir=internal/app/usecase/payslip --output=internal/app/usecase/payslip/mocks/ --all
+	mockery --dir=internal/app/usecase/reimbursement --output=internal/app/usecase/reimbursement/mocks/ --all
+	mockery --dir=internal/app/usecase/user --output=internal/app/usecase/user/mocks/ --all
 
 mock: mock-pkg mock-wrapper mock-repository mock-usecase
