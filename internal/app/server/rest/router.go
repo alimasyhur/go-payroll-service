@@ -35,6 +35,8 @@ func SetupRouter(server *echo.Echo, container *container.Container) {
 		SetPayslipUsecase(container.PayslipUsecase).
 		Validate()
 
+	server.Use(RequestIDMiddleware())
+
 	server.GET("/health-check", healthCheckHandler.Check)
 	server.POST("/login", authHandler.Login)
 

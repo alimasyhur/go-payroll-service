@@ -99,7 +99,8 @@ func AdminOnlyMiddleware() echo.MiddlewareFunc {
 			role := c.Get("role")
 			if role == nil || role.(string) != "admin" {
 				return c.JSON(http.StatusForbidden, echo.Map{
-					"error": "admin access only",
+					"success": false,
+					"message": "admin access only",
 				})
 			}
 			return next(c)
@@ -151,4 +152,25 @@ func SkipLoggerMiddleware(path string) bool {
 	}
 
 	return false
+}
+
+const RequestIDKey = "request_id"
+
+func RequestIDMiddleware() echo.MiddlewareFunc {
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			reqID := c.Request().Header.Get("X-Request-ID")
+			if reqID == "" {
+				return c.JSON(http.StatusBadRequest, echo.Map{
+					"success": false,
+					"message": "missing X-Request-ID header",
+				})
+			}
+
+			c.Set(RequestIDKey, reqID)
+			c.Response().Header().Set("X-Request-ID", reqID)
+
+			return next(c)
+		}
+	}
 }
