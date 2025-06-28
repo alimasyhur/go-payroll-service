@@ -13,10 +13,12 @@ import (
 func (h *handler) CreateReimbursement(c echo.Context) (err error) {
 	userUUID := c.Get("user_uuid").(string)
 	ip := c.RealIP()
+	requestID := c.Get("request_id").(string)
 
 	var req reimbursement.ReimbursementRequest
 	req.UserUUID = userUUID
 	req.IP = ip
+	req.RequestID = requestID
 
 	if reqErr := validator.Validate(c, &req); reqErr != nil {
 		err = apperror.New(http.StatusBadRequest, reqErr)

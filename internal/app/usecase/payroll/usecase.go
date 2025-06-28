@@ -18,6 +18,7 @@ type usecase struct {
 	payrollRepository          repository.Payroll
 	payslipRepository          repository.Payslip
 	userRepository             repository.User
+	auditLogRepository         repository.AuditLog
 }
 
 func NewUsecase() *usecase {
@@ -64,6 +65,11 @@ func (uc *usecase) SetUserRepository(r repository.User) *usecase {
 	return uc
 }
 
+func (uc *usecase) SetAuditLogRepository(r repository.AuditLog) *usecase {
+	uc.auditLogRepository = r
+	return uc
+}
+
 func (uc *usecase) Validate() PayrollUsecase {
 	if uc.attendancePeriodRepository == nil {
 		panic("attendance period repository is nil")
@@ -88,6 +94,9 @@ func (uc *usecase) Validate() PayrollUsecase {
 	}
 	if uc.userRepository == nil {
 		panic("user repository is nil")
+	}
+	if uc.auditLogRepository == nil {
+		panic("audit log repository is nil")
 	}
 
 	return uc

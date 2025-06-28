@@ -45,6 +45,19 @@ func (uc *usecase) CreateAttendancePeriod(ctx context.Context, req AttendancePer
 		return resp, err
 	}
 
+	auditLog := entity.AuditLog{
+		UUID:       uuid.New().String(),
+		UserUUID:   req.UserUUID,
+		Action:     "create",
+		Entity:     "attendance_periods",
+		EntityUUID: period.UUID,
+		IP:         req.IP,
+		RequestID:  req.RequestID,
+		CreatedAt:  time.Now(),
+	}
+
+	uc.auditLogRepository.CreateAuditLog(ctx, auditLog)
+
 	resp = AttendancePeriodResponse{
 		UUID:      uuid.New().String(),
 		StartDate: startDateFormat,

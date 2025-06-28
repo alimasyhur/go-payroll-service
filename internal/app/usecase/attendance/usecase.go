@@ -13,6 +13,7 @@ type AttendanceUsecase interface {
 type usecase struct {
 	attendancePeriodRepository repository.AttendancePeriod
 	attendanceRepository       repository.Attendance
+	auditLogRepository         repository.AuditLog
 }
 
 func NewUsecase() *usecase {
@@ -29,12 +30,20 @@ func (uc *usecase) SetAttendanceRepository(r repository.Attendance) *usecase {
 	return uc
 }
 
+func (uc *usecase) SetAuditLogRepository(r repository.AuditLog) *usecase {
+	uc.auditLogRepository = r
+	return uc
+}
+
 func (uc *usecase) Validate() AttendanceUsecase {
 	if uc.attendancePeriodRepository == nil {
 		panic("attendance period repository is nil")
 	}
 	if uc.attendanceRepository == nil {
 		panic("attendance repository is nil")
+	}
+	if uc.auditLogRepository == nil {
+		panic("audit log repository is nil")
 	}
 
 	return uc

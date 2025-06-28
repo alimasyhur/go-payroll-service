@@ -45,6 +45,19 @@ func (uc *usecase) CreateReimbursement(ctx context.Context, req ReimbursementReq
 		return resp, fmt.Errorf("unable to create reimbursement. %s", err.Error())
 	}
 
+	auditLog := entity.AuditLog{
+		UUID:       uuid.New().String(),
+		UserUUID:   req.UserUUID,
+		Action:     "create",
+		Entity:     "reimbursements",
+		EntityUUID: newReimbursement.UUID,
+		IP:         req.IP,
+		RequestID:  req.RequestID,
+		CreatedAt:  now,
+	}
+
+	uc.auditLogRepository.CreateAuditLog(ctx, auditLog)
+
 	resp = ReimbursementResponse{
 		UUID:        newReimbursement.UUID,
 		UserUUID:    newReimbursement.UserUUID,

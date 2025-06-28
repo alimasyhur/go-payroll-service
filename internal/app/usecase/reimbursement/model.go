@@ -3,6 +3,7 @@ package reimbursement
 import "time"
 
 type ReimbursementRequest struct {
+	RequestID   string  `json:"request_id" validate:"required"`
 	UserUUID    string  `json:"user_uuid" validate:"required"`
 	Date        string  `json:"date" validate:"required"`
 	Amount      float64 `json:"amount" validate:"required"`

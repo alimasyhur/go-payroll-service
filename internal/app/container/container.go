@@ -41,6 +41,7 @@ func Setup() *Container {
 	employeeSalaryRepository := repository.NewEmployeeSalaryRepository(db)
 	payrollRepository := repository.NewPayrollRepository(db)
 	payslipRepository := repository.NewPayslipRepository(db)
+	auditLogRepository := repository.NewAuditLogRepository(db)
 
 	// Setup Usecase
 	userUsecase := user.NewUsecase().
@@ -50,6 +51,7 @@ func Setup() *Container {
 	attendancePeriodUsecase := attendance.NewUsecase().
 		SetAttendancePeriodRepository(attendancePeriodRepository).
 		SetAttendanceRepository(attendanceRepository).
+		SetAuditLogRepository(auditLogRepository).
 		Validate()
 
 	overtimeUsecase := overtime.NewUsecase().
@@ -60,6 +62,7 @@ func Setup() *Container {
 	reimbursementUsecase := reimbursement.NewUsecase().
 		SetAttendancePeriodRepository(attendancePeriodRepository).
 		SetReimbursementRepository(reimbursementRepository).
+		SetAuditLogRepository(auditLogRepository).
 		Validate()
 
 	payrollUsecase := payroll.NewUsecase().
@@ -71,6 +74,7 @@ func Setup() *Container {
 		SetPayrollRepository(payrollRepository).
 		SetPayslipRepository(payslipRepository).
 		SetUserRepository(userRepository).
+		SetAuditLogRepository(auditLogRepository).
 		Validate()
 
 	payslipUsecase := payslip.NewUsecase().

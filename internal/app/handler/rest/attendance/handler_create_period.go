@@ -12,6 +12,12 @@ import (
 
 func (h *handler) CreateAttendancePeriod(c echo.Context) (err error) {
 	var req attendance.AttendancePeriodRequest
+	userUUID := c.Get("user_uuid").(string)
+	req.UserUUID = userUUID
+	ip := c.RealIP()
+	req.IP = ip
+	requestID := c.Get("request_id").(string)
+	req.RequestID = requestID
 	if reqErr := validator.Validate(c, &req); reqErr != nil {
 		err = apperror.New(http.StatusBadRequest, reqErr)
 		return

@@ -3,6 +3,9 @@ package attendance
 import "time"
 
 type AttendancePeriodRequest struct {
+	UserUUID  string `json:"user_uuid"`
+	IP        string `json:"ip"`
+	RequestID string `json:"request_id"`
 	StartDate string `json:"start_date" validate:"required"`
 	EndDate   string `json:"end_date" validate:"required"`
 }

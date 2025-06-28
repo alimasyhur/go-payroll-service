@@ -64,6 +64,19 @@ func (uc *usecase) CreatePayroll(ctx context.Context, req CreatePayrollRequest) 
 		return resp, fmt.Errorf("unable to update period. %s", err.Error())
 	}
 
+	auditLog := entity.AuditLog{
+		UUID:       uuid.New().String(),
+		UserUUID:   req.UserUUID,
+		Action:     "create",
+		Entity:     "payrolls",
+		EntityUUID: newPayroll.UUID,
+		IP:         req.IP,
+		RequestID:  req.RequestID,
+		CreatedAt:  now,
+	}
+
+	uc.auditLogRepository.CreateAuditLog(ctx, auditLog)
+
 	resp.UUID = newPayroll.UUID
 
 	return resp, nil
@@ -87,8 +100,6 @@ func (uc *usecase) generatePayslipForEmployee(ctx context.Context, req GenerateP
 	for _, r := range reimbursements {
 		totalReimburse += r.Amount
 	}
-
-	fmt.Println(salary, workDays, overtimes)
 
 	total := float64(workDays)*dailySalary + totalOvertime + totalReimburse
 
