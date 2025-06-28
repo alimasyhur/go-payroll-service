@@ -94,6 +94,9 @@ run ./bin/go-payroll-service
 run bash test_usecase.sh
 ```
 
+## 📊 ERD
+[ERD Design](https://dbdiagram.io/d/payroll-service-685ff6e1f413ba35084f069e)
+
 ## 📘 API Reference
 
 ### 🔐 Authentication

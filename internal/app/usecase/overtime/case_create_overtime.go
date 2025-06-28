@@ -16,9 +16,12 @@ func (uc *usecase) CreateOvertime(ctx context.Context, req OvertimeRequest) (res
 	}
 
 	now := time.Now()
-	today := now.Format(time.DateOnly)
+	_, err = time.Parse(time.DateOnly, req.Date)
+	if err != nil {
+		return resp, fmt.Errorf("unable to parse date. %s", err.Error())
+	}
 
-	closedPeriod, err := uc.attendancePeriodRepository.GetOneClosedByDate(ctx, today)
+	closedPeriod, err := uc.attendancePeriodRepository.GetOneClosedByDate(ctx, req.Date)
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return resp, fmt.Errorf("unable to get Period. %s", err.Error())
 	}
@@ -27,7 +30,7 @@ func (uc *usecase) CreateOvertime(ctx context.Context, req OvertimeRequest) (res
 		return resp, fmt.Errorf("attendance period is closed")
 	}
 
-	overtimeToday, err := uc.overtimeRepository.GetOneByUserDate(ctx, req.UserUUID, today)
+	overtimeToday, err := uc.overtimeRepository.GetOneByUserDate(ctx, req.UserUUID, req.Date)
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return resp, fmt.Errorf("unable to get overtime. %s", err.Error())
 	}

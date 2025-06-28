@@ -16,14 +16,17 @@ func (uc *usecase) CreateReimbursement(ctx context.Context, req ReimbursementReq
 	}
 
 	now := time.Now()
-	today := now.Format(time.DateOnly)
+	_, err = time.Parse(time.DateOnly, req.Date)
+	if err != nil {
+		return resp, fmt.Errorf("unable to parse date. %s", err.Error())
+	}
 
-	closedPeriod, err := uc.attendancePeriodRepository.GetOneClosedByDate(ctx, today)
+	closedPeriod, err := uc.attendancePeriodRepository.GetOneClosedByDate(ctx, req.Date)
 	if err != nil && err != gorm.ErrRecordNotFound {
 		return resp, fmt.Errorf("unable to get Period. %s", err.Error())
 	}
 
-	if closedPeriod.UUID != "" {
+	if closedPeriod.IsClosed {
 		return resp, fmt.Errorf("attendance period is closed")
 	}
 

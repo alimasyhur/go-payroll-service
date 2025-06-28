@@ -9,7 +9,6 @@ require (
 	github.com/gogo/protobuf v1.3.2
 	github.com/labstack/echo/v4 v4.7.2
 	github.com/lib/pq v1.10.2
-	github.com/redis/go-redis/v9 v9.0.2
 	github.com/spf13/cast v1.5.0
 	github.com/spf13/cobra v1.5.0
 	github.com/spf13/viper v1.12.0
@@ -27,9 +26,7 @@ require github.com/google/go-cmp v0.6.0 // indirect
 
 require (
 	github.com/armon/go-radix v1.0.0 // indirect
-	github.com/cespare/xxhash/v2 v2.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/elastic/go-licenser v0.4.0 // indirect
 	github.com/elastic/go-sysinfo v1.7.1 // indirect
 	github.com/elastic/go-windows v1.0.1 // indirect
