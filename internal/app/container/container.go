@@ -7,6 +7,7 @@ import (
 	"github.com/alimasyhur/go-payroll-service/internal/app/usecase/attendance"
 	"github.com/alimasyhur/go-payroll-service/internal/app/usecase/overtime"
 	"github.com/alimasyhur/go-payroll-service/internal/app/usecase/payroll"
+	"github.com/alimasyhur/go-payroll-service/internal/app/usecase/payslip"
 	"github.com/alimasyhur/go-payroll-service/internal/app/usecase/reimbursement"
 	"github.com/alimasyhur/go-payroll-service/internal/app/usecase/user"
 	"github.com/alimasyhur/go-payroll-service/internal/pkg/logger"
@@ -19,6 +20,7 @@ type Container struct {
 	OvertimeUsecase      overtime.OvertimeUsecase
 	ReimbursementUsecase reimbursement.ReimbursementUsecase
 	PayrollUsecase       payroll.PayrollUsecase
+	PayslipUsecase       payslip.PayslipUsecase
 }
 
 func Setup() *Container {
@@ -71,6 +73,16 @@ func Setup() *Container {
 		SetUserRepository(userRepository).
 		Validate()
 
+	payslipUsecase := payslip.NewUsecase().
+		SetAttendancePeriodRepository(attendancePeriodRepository).
+		SetOvertimeRepository(overtimeRepository).
+		SetAttendanceRepository(attendanceRepository).
+		SetReimbursementRepository(reimbursementRepository).
+		SetEmployeeSalaryRepository(employeeSalaryRepository).
+		SetPayrollRepository(payrollRepository).
+		SetPayslipRepository(payslipRepository).
+		Validate()
+
 	return &Container{
 		Config:               cfg,
 		UserUsecase:          userUsecase,
@@ -78,5 +90,6 @@ func Setup() *Container {
 		OvertimeUsecase:      overtimeUsecase,
 		ReimbursementUsecase: reimbursementUsecase,
 		PayrollUsecase:       payrollUsecase,
+		PayslipUsecase:       payslipUsecase,
 	}
 }

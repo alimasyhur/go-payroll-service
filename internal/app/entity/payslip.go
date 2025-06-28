@@ -20,3 +20,11 @@ type Payslip struct {
 func (e *Payslip) TableName() string {
 	return "payslips"
 }
+
+type PayslipDetail struct {
+	UUID                 string `gorm:"column:uuid"`
+	PayrollUUID          string `gorm:"column:payroll_uuid"`
+	AttendancePeriodUUID string `gorm:"column:period_uuid"`
+	PeriodStartDate      string `gorm:"column:period_start_date"`
+	PeriodEndDate        string `gorm:"column:period_end_date"`
+}
