@@ -31,3 +31,23 @@ type ReimbursementItem struct {
 	Amount      float64 `json:"amount"`
 	Description string  `json:"description"`
 }
+
+type GetSummaryRequest struct {
+	UserUUID    string `json:"user_uuid" validate:"required"`
+	PayrollUUID string `json:"payroll_uuid" validate:"required"`
+}
+
+type GetSummaryResponse struct {
+	PayrollUUID      string            `json:"payroll_uuid"`
+	TotalEmployees   int               `json:"total_employees"`
+	TotalTakeHomePay float64           `json:"total_take_home_pay"`
+	Employees        []EmployeePayslip `json:"employees"`
+}
+
+type EmployeePayslip struct {
+	UserID     string  `json:"user_id"`
+	Username   string  `json:"username"`
+	BaseSalary float64 `json:"base_salary"`
+	WorkDays   int64   `json:"work_days"`
+	Total      float64 `json:"total"`
+}

@@ -10,6 +10,7 @@ import (
 )
 
 type User interface {
+	GetOneByUUID(ctx context.Context, uuid string) (result entity.User, err error)
 	GetOneByUsername(ctx context.Context, username string) (result entity.User, err error)
 	GetListByRole(ctx context.Context, role string) (results []entity.User, err error)
 	CreateUser(ctx context.Context, payload entity.User) (result entity.User, err error)
@@ -30,6 +31,26 @@ func NewUserRepository(db *gorm.DB) User {
 		tableName: "users",
 		db:        db,
 	}
+}
+
+func (r *user) GetOneByUUID(ctx context.Context, uuid string) (result entity.User, err error) {
+	err = r.db.WithContext(ctx).Table(r.tableName).Select(
+		"uuid",
+		"username",
+		"password",
+		"role",
+	).
+		Where("uuid = ?", uuid).
+		Take(&result).Error
+
+	if err != nil {
+		logger.Log.Error(ctx, err.Error(), "UserRepository.GetOneByUUID", map[string]interface{}{
+			"uuid": uuid,
+		})
+		return
+	}
+
+	return
 }
 
 func (r *user) GetListByRole(ctx context.Context, role string) (results []entity.User, err error) {

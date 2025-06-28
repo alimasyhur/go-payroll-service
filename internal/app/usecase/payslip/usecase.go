@@ -8,6 +8,7 @@ import (
 
 type PayslipUsecase interface {
 	GetOnePayslip(ctx context.Context, req GetOnePayslipRequest) (resp GetOnePayslipResponse, err error)
+	GetSummary(ctx context.Context, req GetSummaryRequest) (resp GetSummaryResponse, err error)
 }
 type usecase struct {
 	attendancePeriodRepository repository.AttendancePeriod
@@ -17,6 +18,7 @@ type usecase struct {
 	employeeSalaryRepository   repository.EmployeeSalary
 	payrollRepository          repository.Payroll
 	payslipRepository          repository.Payslip
+	userRepository             repository.User
 }
 
 func NewUsecase() *usecase {
@@ -58,6 +60,11 @@ func (uc *usecase) SetPayslipRepository(r repository.Payslip) *usecase {
 	return uc
 }
 
+func (uc *usecase) SetUserRepository(r repository.User) *usecase {
+	uc.userRepository = r
+	return uc
+}
+
 func (uc *usecase) Validate() PayslipUsecase {
 	if uc.attendancePeriodRepository == nil {
 		panic("attendance period repository is nil")
@@ -79,6 +86,9 @@ func (uc *usecase) Validate() PayslipUsecase {
 	}
 	if uc.payslipRepository == nil {
 		panic("payslip repository is nil")
+	}
+	if uc.userRepository == nil {
+		panic("user repository is nil")
 	}
 
 	return uc

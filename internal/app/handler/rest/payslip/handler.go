@@ -7,6 +7,7 @@ import (
 
 type PayslipHandler interface {
 	GetOnePayslip(c echo.Context) error
+	GetSummary(c echo.Context) error
 }
 
 type handler struct {

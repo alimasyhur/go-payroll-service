@@ -81,6 +81,7 @@ func Setup() *Container {
 		SetEmployeeSalaryRepository(employeeSalaryRepository).
 		SetPayrollRepository(payrollRepository).
 		SetPayslipRepository(payslipRepository).
+		SetUserRepository(userRepository).
 		Validate()
 
 	return &Container{

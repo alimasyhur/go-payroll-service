@@ -51,6 +51,7 @@ func SetupRouter(server *echo.Echo, container *container.Container) {
 			admin.Use(AdminOnlyMiddleware())
 			admin.POST("/attendance-periods", attendanceHandler.CreateAttendancePeriod)
 			admin.POST("/payrolls/run", payrollHandler.CreatePayroll)
+			admin.GET("/payslips/:payroll_uuid/summary", payslipHandler.GetSummary)
 		}
 	}
 
